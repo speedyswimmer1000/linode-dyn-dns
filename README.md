@@ -29,6 +29,8 @@ You have a internet connection without a fixed IP and a [Linode](http://www.lino
         $ echo DOMAIN_ID > .domain
         $ echo RESOURCE_ID > .resource
 
+        The .resource file may have multiple RESOURCE_IDs on it; there may be one RESOURCE_ID per line.
+
 6. Set cron to update every 30 minutes:
 
         # Minutes  Hr  Dy  Mo  Wd  Command

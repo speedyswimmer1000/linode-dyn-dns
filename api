@@ -11,6 +11,8 @@ MY_DOMAIN_ID=`cat $MY_PATH/.domain 2>/dev/null`
 
 MY_RESOURCE_ID=`cat $MY_PATH/.resource 2>/dev/null`
 
+MY_RESOURCE_FILE=$MY_PATH/.resource
+
 LOG_FILE="$MY_PATH/dns.log"
 
 CACHED_IP_FILE="$MY_PATH/.ip"
@@ -61,19 +63,23 @@ function list_resources {
 # @param Domain ID
 # @param Resource ID
 function update_resource_target {
-  [ $# -ne 2 ] && {
-      echo "Usage: update_resource_target domain resource" 1>&2;
+  [ $# -ne 3 ] && {
+      echo "Usage: update_resource_target domain resource ip" 1>&2;
       exit 1;
   }
-  echo $(curl --silent -g $LINODE_API_URL\&api_action=domain.resource.update\&DomainID=$1\&ResourceID=$2\&TTL_sec=300\&Target=[remote_addr])
+  echo $(curl --silent -g $LINODE_API_URL\&api_action=domain.resource.update\&DomainID=$1\&ResourceID=$2\&TTL_sec=300\&Target=$3)
 }
 
 function update {
   IP_OLD=`get_cached_ip`
   IP_NEW=`get_ip`
-
+ 
   [ "$IP_OLD" != "$IP_NEW" ] && [ "$IP_NEW" != "" ] && {
-    update_resource_target $MY_DOMAIN_ID $MY_RESOURCE_ID
+    while read -r RESOURCE_LINE
+      do
+         echo $RESOURCE_LINE
+         update_resource_target $MY_DOMAIN_ID $RESOURCE_LINE $IP_NEW
+    done < $MY_RESOURCE_FILE
     echo "[`date`] IP changed from $IP_OLD to $IP_NEW" >> $LOG_FILE
   }
 
