@@ -2,6 +2,8 @@
 
 A lightweight Dynamic DNS service using the [Linode API](http://www.linode.com/api).
 
+This is a fork with light modifications from https://github.com/andrewchilds/linode-dyn-dns; all credit is his. 
+
 ## What would I use it for?
 
 You have a internet connection without a fixed IP and a [Linode](http://www.linode.com) account. This script lets you access that network remotely using a domain name like apartment.domain.com, without having to keep track of a dynamic IP, which can change without warning.
